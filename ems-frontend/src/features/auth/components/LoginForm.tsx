@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import InputField from "../../../components/common/InputField";
 import PasswordField from "../../../components/common/PasswordField";
 import { getEmailError, getPasswordError } from "../../../utils/validation";
@@ -21,8 +20,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     email: "",
     password: "",
   });
-
-  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -63,11 +60,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
       const result = await login(formData.email, formData.password);
       console.log("Login success:", result);
       onSuccess?.(result);
-
-      // Navigate to OTP Verification with optional state
-      navigate("/otp-verification", {
-        state: { email: formData.email },
-      });
     } catch (error: any) {
       console.error("Login failed:", error);
       alert(error.message || "Login failed");
