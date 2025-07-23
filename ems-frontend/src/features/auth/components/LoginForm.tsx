@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
-import InputField from '../../../components/common/InputField';
-import PasswordField from '../../../components/common/PasswordField';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import InputField from "../../../components/common/InputField";
+import PasswordField from "../../../components/common/PasswordField";
+import { getEmailError, getPasswordError } from "../../../utils/validation";
+import { login } from "../../../services/authService";
 
 interface LoginFormProps {
   onSuccess?: (data: any) => void;
@@ -8,58 +11,66 @@ interface LoginFormProps {
 
 const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    rememberMe: false
+    email: "",
+    password: "",
+    rememberMe: false,
   });
 
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
-  const validateEmail = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    const updatedValue = type === "checkbox" ? checked : value;
+
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: updatedValue,
     }));
 
-    if (errors[name as keyof typeof errors]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+    if (name === "email" && typeof updatedValue === "string") {
+      const emailError = getEmailError(updatedValue);
+      setErrors((prev) => ({ ...prev, email: emailError ?? "" }));
+    }
+
+    if (name === "password" && typeof updatedValue === "string") {
+      const passwordError = getPasswordError(updatedValue);
+      setErrors((prev) => ({ ...prev, password: passwordError ?? "" }));
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newErrors = {
-      email: '',
-      password: ''
-    };
+    const emailError = getEmailError(formData.email);
+    const passwordError = getPasswordError(formData.password);
 
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
+    setErrors({
+      email: emailError ?? "",
+      password: passwordError ?? "",
+    });
 
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
+    const isValid = !emailError && !passwordError;
 
-    setErrors(newErrors);
+    if (!isValid) return;
 
-    const isValid = !newErrors.email && !newErrors.password;
-    if (isValid) {
-      console.log('Login successful:', formData);
-      onSuccess?.(formData);
+    try {
+      const result = await login(formData.email, formData.password);
+      console.log("Login success:", result);
+      onSuccess?.(result);
+
+      // Navigate to OTP Verification with optional state
+      navigate("/otp-verification", {
+        state: { email: formData.email },
+      });
+    } catch (error: any) {
+      console.error("Login failed:", error);
+      alert(error.message || "Login failed");
     }
   };
 
@@ -81,7 +92,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
         onChange={handleInputChange}
         error={errors.password}
         showPassword={showPassword}
-        toggleShowPassword={() => setShowPassword(prev => !prev)}
+        toggleShowPassword={() => setShowPassword((prev) => !prev)}
       />
 
       <div className="flex items-center justify-between">

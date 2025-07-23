@@ -27,14 +27,14 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
       </label>
       <div className="relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Lock className="h-5 w-5 text-gray-100 dark:text-gray" />
+          <Lock className="h-5 w-5 text-gray-400 dark:text-gray" />
         </div>
         <input
           type={showPassword ? "text" : "password"}
           name={name}
           value={value}
           onChange={onChange}
-          className={`w-full pl-10 pr-12 py-3 border-2 rounded-xl bg-gray-50/50 dark:bg-gray-700/50 backdrop-blur-sm transition-all duration-300 focus:outline-none focus:ring-0 ${
+          className={`w-full pl-10 pr-12 py-3 border-2 rounded-xl bg-gray-50/50 dark:bg-gray-700/50 transition-all duration-300 focus:outline-none focus:ring-0 ${
             error
               ? "border-red-300 dark:border-red-600 focus:border-red-500 dark:focus:border-red-400"
               : "border-gray-200 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-400"
