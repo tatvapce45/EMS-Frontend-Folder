@@ -3,6 +3,7 @@ import InputField from "../../../components/common/InputField";
 import PasswordField from "../../../components/common/PasswordField";
 import { getEmailError, getPasswordError } from "../../../utils/validation";
 import { login } from "../../../services/authService";
+import { useNavigate } from 'react-router-dom';
 
 interface LoginFormProps {
   onSuccess?: (data: any) => void;
@@ -14,6 +15,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     password: "",
     rememberMe: false,
   });
+
+  const navigate = useNavigate(); 
 
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({
@@ -48,8 +51,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     const passwordError = getPasswordError(formData.password);
 
     setErrors({
-      email: emailError ?? "",
-      password: passwordError ?? "",
+      email: emailError ?? '',
+      password: passwordError ?? '',
     });
 
     const isValid = !emailError && !passwordError;
@@ -58,11 +61,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
 
     try {
       const result = await login(formData.email, formData.password);
-      console.log("Login success:", result);
-      onSuccess?.(result);
+      console.log('Login success:', result);
+
+      // 👇 Navigate to OTPVerification and pass email via state
+      navigate('/verify', {
+        state: {
+          userEmail: formData.email,
+        },
+      });
     } catch (error: any) {
-      console.error("Login failed:", error);
-      alert(error.message || "Login failed");
+      console.error('Login failed:', error);
+      alert(error.message || 'Login failed');
     }
   };
 
