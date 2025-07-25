@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import Login from '../features/auth/pages/Login';
-import OTPVerification from '../features/auth/components/otp';
+import OTPVerification from '../features/auth/components/OTPVerification';
 import { useLocation, Navigate } from 'react-router-dom';
 
 const AppRoutes: React.FC = () => {
