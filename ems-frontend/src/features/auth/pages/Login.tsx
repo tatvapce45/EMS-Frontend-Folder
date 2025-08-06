@@ -12,4 +12,4 @@ const Login: React.FC = () => {
     </div>
   );
 };
-  export default Login;
+export default Login;

@@ -26,7 +26,7 @@ const OTPInput = forwardRef<OTPInputRef, OTPInputProps>(({
   useEffect(() => {
     // Focus first input on mount
     setTimeout(() => inputRefs.current[0]?.focus(), 100);
-  }, []);
+  },[type]);
 
   const handleChange = (index: number, value: string) => {
     if (!isValidDigit(value)) return;

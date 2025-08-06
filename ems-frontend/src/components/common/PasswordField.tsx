@@ -22,7 +22,7 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
 }) => {
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium text-gray-700 dark:text-gray-300 block">
+      <label className="text-sm font-medium text-gray-300 block">
         {label}
       </label>
       <div className="relative">

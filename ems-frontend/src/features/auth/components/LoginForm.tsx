@@ -59,29 +59,35 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
 
     if (!isValid) return;
 
-    try {
-      const result = await login(formData.email, formData.password);
-      console.log("Login success:", result);
+    // try {
+    //   const result = await login(formData.email, formData.password);
+    //   console.log("Login success:", result);
 
-      if (result.success) {
-        sessionStorage.setItem("userEmail", formData.email);
-        sessionStorage.setItem("loginVerified", "true");
+    //   if (result.success) {
+    //     sessionStorage.setItem("userEmail", formData.email);
+    //     sessionStorage.setItem("loginVerified", "true");
 
-        navigate("/verify", {
-          state: {
-            userEmail: formData.email,
-            loginVerified: true,
-          },
-        });
-      }
-      else
-      {
-        throw new Error(result.message || "Login failed");
-      }
-    } catch (error: any) {
-      console.error("Login failed:", error);
-      alert(error.message || "Login failed");
-    }
+    //     navigate("/verify", {
+    //       state: {
+    //         userEmail: formData.email,
+    //         loginVerified: true,
+    //       },
+    //     });
+    //   }
+    //   else
+    //   {
+    //     throw new Error(result.message || "Login failed");
+    //   }
+    // } catch (error: any) {
+    //   console.error("Login failed:", error);
+    //   alert(error.message || "Login failed");
+    // }
+    navigate("/verify", {
+        state: {
+          userEmail: formData.email,
+          loginVerified: true,
+        },
+      });
   };
 
   return (

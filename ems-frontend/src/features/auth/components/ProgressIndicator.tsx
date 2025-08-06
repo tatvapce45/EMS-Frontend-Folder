@@ -22,8 +22,8 @@ const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
             emailVerified
               ? "bg-green-500 border-green-500 text-white"
               : currentStep === "email"
-              ? "border-blue-500 text-blue-500 bg-blue-50 dark:bg-blue-900/20"
-              : "border-gray-300 dark:border-gray-600 text-gray-400"
+              ? "border-blue-500 text-blue-500 bg-blue-900/20"
+              : "border-gray-600 text-gray-400"
           }`}
         >
           {emailVerified ? (
